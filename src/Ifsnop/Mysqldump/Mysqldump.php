@@ -170,6 +170,9 @@ class Mysqldump
      */
     private function connect()
     {
+        //PDO doesn't work with port number in form host:port, so add port parameter if necessary
+        $host = str_replace( ':', ';port=', $this->host );
+
         // Connecting with PDO
         try {
             switch ($this->dbType) {
@@ -181,7 +184,7 @@ class Mysqldump
                 case 'dblib':
                     $this->dbHandler = new PDO(
                         $this->dbType . ":host=" .
-                        $this->host . ";dbname=" . $this->db,
+                        $host . ";dbname=" . $this->db,
                         $this->user,
                         $this->pass,
                         $this->pdoSettings
